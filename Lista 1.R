@@ -137,6 +137,40 @@ microbenchmark(
 # O algoritmo da rejeição dado os parâmetros usados se mostrou muito superior
 # em tempo computacional.
 
+########### Aula 1 - Ex 2 - Q15 ##########
+
+reason = function(x)
+{
+  return((x^2) * exp((lambda-1)*x))
+}
+
+lambda = seq(0.01,0.99,0.01)
+rejq16 = function(lambda,n = 1000)
+{
+  k <- 0 #counter for accepted
+  j <- 0 #iterations
+  y <- numeric(n)
+  z = seq(0.01,20,0.01)
+  r = reason(z)
+  alpha = 1/max(reason(z)) # De acordo com o slide, o 1/alpha é o maximo da
+  while (k < n) {          # que a razão das funções assume. Isso muda pra 
+                           # lambda em teoria.
+    u <- runif(1)
+    j<-j+1
+    x <- rexp(1,lambda) #random variate from g
+    if (alpha*(x^2) * exp((lambda-1)*x) > u) {
+      #we accept x
+      k<-k+1
+      y[k] <- x
+    }
+  }
+  return(j)
+}
+
+iter = sapply(lambda,rejq16)
+best = match(min(iter), iter)
+lambda[best]
+
 ########### Aula 1 - Ex 3 ##########
 #3.11
 set.seed(10)
