@@ -137,7 +137,7 @@ microbenchmark(
 # O algoritmo da rejeição dado os parâmetros usados se mostrou muito superior
 # em tempo computacional.
 
-########### Aula 1 - Ex 2 - Q15 ##########
+########### Aula 1 - Ex 2 - Q16 ##########
 
 reason = function(x)
 {
