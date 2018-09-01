@@ -70,11 +70,72 @@ hist(rross5.4(50000,1,2),freq = F)
 
 ########### Aula 1 - Ex 2 - Q15 ##########
 
+## Método da rejeição a partir de dist. exp(1/2) com alpha = 1/4
 
-e = (3/7)*exp(-(3/7)*seq(0,10,0.01))
-f = seq(0,10,0.01)*exp(-seq(0,10,0.01))
-plot(f,type="l",ylim = c(0,1))
-lines(e)
+n <- 100000
+rejq15 = function(n)
+{
+  k <- 0 #counter for accepted
+  j <- 0 #iterations
+  y <- numeric(n)
+  while (k < n) {
+    u <- runif(1)
+    j<-j+1
+    x <- rexp(1,50/100) #random variate from g
+    if (0.5*x * exp(-0.5*x) > u) {
+      #we accept x
+      k<-k+1
+      y[k] <- x
+    }
+  }
+  return(y)
+}
+hist(rejq15(n),freq = FALSE,breaks = 80,ylim = c(0,0.45), xlim=c(0,8))
+lines(seq(0,8,0.01),seq(0,8,0.01)*exp(-seq(0,8,0.01)))
+
+## Método SIR a com proposta exp(-1/2)
+
+Pesos1 <- function(y){
+  df <- y*exp(-y)
+  dg <- dexp(y,1/2)
+  p <- df/dg
+  pesos <- p/sum(p)
+  return(pesos)
+}
+
+rxex_sir <- function(n, m){
+  y <- rexp(m,1/2)
+  pesos <- Pesos1(y)
+  amostra <- sample(x = y, size = n, replace = T, prob = pesos)
+  return(amostra)
+}
+
+n = 100000
+m = 100000
+
+amostra <- rxex_sir(n, m)
+hist(amostra, freq = FALSE,breaks = 80, ylim = c(0,0.45),xlim=c(0,8))
+lines(seq(0,8,0.01),seq(0,8,0.01)*exp(-seq(0,8,0.01)))
+
+######## Comparação de eficiência #########
+
+install.packages("microbenchmark")
+require(microbenchmark)
+
+if(!require(microbenchmark)){
+  install.packages("microbenchmark")
+  require(microbenchmark)}
+
+# Análise de desempenho
+
+n = 1000
+microbenchmark(
+  rxex_sir(n,1000),
+  rejq15(n),
+  times = 1000)
+
+# O algoritmo da rejeição dado os parâmetros usados se mostrou muito superior
+# em tempo computacional.
 
 ########### Aula 1 - Ex 3 ##########
 #3.11
