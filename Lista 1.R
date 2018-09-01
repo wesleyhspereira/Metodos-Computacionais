@@ -35,6 +35,24 @@ h = function(k, l) {
 
 mean(h(runif(100000), runif(100000)))
 
+#3.13 
+
+the.n = function()
+{
+  i = 0
+  x = 1
+  while (x >= exp(-3))
+  {
+    x = x*runif(1)
+    i = i+1
+  } 
+  return(i-1)
+}
+
+then = replicate(100000,the.n())
+mean(then) # Media ~ 3
+prop.table(table(then)) # P(N = i)
+
 
 ########### Aula 1 - Ex 2 - Q2 ##########
 
